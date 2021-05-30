@@ -33,6 +33,7 @@ export const signup = async (
       createdAt: admin.firestore.Timestamp.now()
     });
 
+    functions.logger.info(`new user registered: ${data.user.email} (${data.user.uid})`);
     return res.status(201).json({
       message: `user ${data.user.email} signed up successfully!`,
       token: await data.user.getIdToken()
