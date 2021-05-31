@@ -3,6 +3,8 @@
     "functions"
   ],
   "cSpell.words": [
+    "gcloud",
+    "gsutil",
     "middlewares",
     "signup"
   ]
