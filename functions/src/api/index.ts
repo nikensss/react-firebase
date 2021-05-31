@@ -3,10 +3,10 @@ import * as express from 'express';
 import firebase from 'firebase';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { firebaseAuth } from './middlewares';
+import { isRegistered } from './middlewares';
 import { login, signup } from './routes/auth';
 import { getScreams, scream } from './routes/screams';
-import { uploadImage } from './routes/user';
+import { addUserDetails, getAuthenticatedUser, uploadImage } from './routes/user';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyABk4Zyl_cBnjPkSp7NIzbp4wq85zg1waA',
@@ -30,11 +30,13 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => res.json({ message: 'api root! 🥳' }));
 
 app.get('/screams', getScreams);
-app.post('/scream', firebaseAuth, scream);
+app.post('/scream', isRegistered, scream);
 
 app.post('/signup', signup);
 app.post('/login', login);
 
-app.post('/user/image', firebaseAuth, uploadImage);
+app.get('/user', isRegistered, getAuthenticatedUser);
+app.post('/user', isRegistered, addUserDetails);
+app.post('/user/image', isRegistered, uploadImage);
 
 export const api = functions.region('europe-west1').https.onRequest(app);

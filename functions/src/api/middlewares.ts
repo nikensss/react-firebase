@@ -5,7 +5,7 @@ import { toJsonError } from '../utils';
 
 const db = admin.firestore();
 
-export const firebaseAuth = async (
+export const isRegistered = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction

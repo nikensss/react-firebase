@@ -7,7 +7,48 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { toJsonError } from '../../utils';
+import { reduceUserDetails } from '../../utils/validators';
 const db = admin.firestore();
+
+export const getAuthenticatedUser = async (
+  req: express.Request,
+  res: express.Response
+): Promise<unknown> => {
+  if (!req.user) return res.status(403).json({ message: 'unauthorized' });
+  const { handle } = req.user;
+
+  try {
+    const result: Record<string, unknown> = {};
+    const user = (await db.collection('users').doc(handle).get()).data();
+    if (!user) {
+      return res.status(404).json({ message: 'not found' });
+    }
+    result.credentials = user;
+    const likes = await db.collection('likes').where('userHandle', '==', handle).get();
+    result.likes = likes.docs.map((l) => l.data());
+
+    return res.json({ userData: result });
+  } catch (ex) {
+    return res.status(500).json({ error: ex.code });
+  }
+};
+
+export const addUserDetails = async (
+  req: express.Request,
+  res: express.Response
+): Promise<unknown> => {
+  if (!req.user) return res.status(403).json({ message: 'unauthorized' });
+  const { handle } = req.user;
+
+  const userDetails = reduceUserDetails(req.body);
+
+  try {
+    await db.collection('users').doc(handle).update(userDetails);
+    return res.json({ message: 'details added successfully' });
+  } catch (ex) {
+    return res.status(500).json({ error: ex.code });
+  }
+};
 
 export const uploadImage = async (
   req: express.Request,
@@ -15,6 +56,12 @@ export const uploadImage = async (
 ): Promise<unknown> => {
   if (!req.user) return res.status(403).json({ message: 'unauthorized' });
   const { handle } = req.user;
+  if (
+    !req.headers['content-type'] ||
+    !['image/jpeg', 'image/png'].includes(req.headers['content-type'])
+  ) {
+    return res.status(401).json({ message: 'Wrong file type' }).end();
+  }
 
   const busboy = new BusBoy({ headers: req.headers });
 
@@ -33,7 +80,7 @@ export const uploadImage = async (
       mimetype: string
     ) => {
       if (!['image/jpeg', 'image/png'].includes(mimetype)) {
-        return res.status(401).json({ message: 'Wrong image type' }).end();
+        return res.status(401).json({ message: 'Wrong file type' }).end();
       }
       const imageExtension = path.extname(filename);
       const imageFileName = `${format(new Date(), 'yyyy-MM-dd_HHmmss')}${imageExtension}`;

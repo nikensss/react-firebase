@@ -45,3 +45,22 @@ export const validateLoginData = (user: UserLogin): Validator => {
     valid: Object.keys(errors).length === 0
   };
 };
+
+export const reduceUserDetails = (data: Record<string, string>): Record<string, string> => {
+  const userDetails: Record<string, string> = {};
+
+  if (data.bio && !isEmpty(data.bio.trim())) userDetails.bio = data.bio.trim();
+  // if strictly http, ignore the website
+  if (data.website && !isEmpty(data.website.trim())) {
+    if (!data.website.startsWith('http:')) {
+      userDetails.website = '';
+    } else if (!data.website.startsWith('https:')) {
+      userDetails.website = `https://${data.website.trim()}`;
+    } else {
+      userDetails.website = data.website.trim();
+    }
+  }
+  if (data.location && !isEmpty(data.location.trim())) userDetails.location = data.location.trim();
+
+  return userDetails;
+};
