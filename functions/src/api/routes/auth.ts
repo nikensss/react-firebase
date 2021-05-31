@@ -30,6 +30,8 @@ export const signup = async (
       email: user.email,
       handle: user.handle,
       userId: data.user.uid,
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/react-firebase-4283b.appspot.com/o/blank_profile_picture.png?alt=media',
       createdAt: admin.firestore.Timestamp.now()
     });
 

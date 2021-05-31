@@ -6,6 +6,7 @@ import * as functions from 'firebase-functions';
 import { firebaseAuth } from './middlewares';
 import { login, signup } from './routes/auth';
 import { getScreams, scream } from './routes/screams';
+import { uploadImage } from './routes/user';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyABk4Zyl_cBnjPkSp7NIzbp4wq85zg1waA',
@@ -33,5 +34,7 @@ app.post('/scream', firebaseAuth, scream);
 
 app.post('/signup', signup);
 app.post('/login', login);
+
+app.post('/user/image', firebaseAuth, uploadImage);
 
 export const api = functions.region('europe-west1').https.onRequest(app);
