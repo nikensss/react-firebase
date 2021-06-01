@@ -5,7 +5,7 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { isRegistered } from './middlewares';
 import { login, signup } from './routes/auth';
-import { getScreams, scream } from './routes/screams';
+import { commentOnScream, getScream, getScreams, scream } from './routes/screams';
 import { addUserDetails, getAuthenticatedUser, uploadImage } from './routes/user';
 
 firebase.initializeApp({
@@ -29,8 +29,10 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => res.json({ message: 'api root! 🥳' }));
 
-app.get('/screams', getScreams);
+app.get('/scream/:screamId', getScream);
+app.post('/scream/:screamId/comment', isRegistered, commentOnScream);
 app.post('/scream', isRegistered, scream);
+app.get('/screams', getScreams);
 
 app.post('/signup', signup);
 app.post('/login', login);

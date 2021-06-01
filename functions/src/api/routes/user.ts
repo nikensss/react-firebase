@@ -56,12 +56,12 @@ export const uploadImage = async (
 ): Promise<unknown> => {
   if (!req.user) return res.status(403).json({ message: 'unauthorized' });
   const { handle } = req.user;
-  if (
-    !req.headers['content-type'] ||
-    !['image/jpeg', 'image/png'].includes(req.headers['content-type'])
-  ) {
-    return res.status(401).json({ message: 'Wrong file type' }).end();
-  }
+  // if (
+  //   !req.headers['content-type'] ||
+  //   !['image/jpeg', 'image/png'].includes(req.headers['content-type'])
+  // ) {
+  //   return res.status(401).json({ message: 'Wrong file type' }).end();
+  // }
 
   const busboy = new BusBoy({ headers: req.headers });
 

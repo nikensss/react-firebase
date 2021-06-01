@@ -31,6 +31,7 @@ export const isRegistered = async (
     if (!user) return res.status(403).json({ error: 'Unauthorized' }).end();
 
     req.user.handle = user.data().handle;
+    req.user.imageUrl = user.data().imageUrl;
 
     return next(null);
   } catch (ex) {
