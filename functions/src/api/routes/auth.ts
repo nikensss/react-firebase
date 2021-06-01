@@ -23,6 +23,10 @@ export const signup = async (
       return res.status(401).json({ handle: `handle ${user.handle} already in use` });
     }
 
+    if (typeof process.env.FIREBASE_AUTH_EMULATOR_HOST === 'string') {
+      firebase.auth().useEmulator(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}`);
+    }
+
     const data = await firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
     if (!data.user) throw new Error('Could not sign up user!');
 
@@ -65,6 +69,10 @@ export const login = async (
   if (!valid) return res.status(401).json(errors);
 
   try {
+    if (typeof process.env.FIREBASE_AUTH_EMULATOR_HOST === 'string') {
+      firebase.auth().useEmulator(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}`);
+    }
+
     const auth = await firebase.auth().signInWithEmailAndPassword(user.email, user.password);
     return res.json({ token: await auth.user?.getIdToken() });
   } catch (ex) {
