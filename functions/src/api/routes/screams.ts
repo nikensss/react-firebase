@@ -54,12 +54,16 @@ export const scream = async (
 
     const scream = {
       body: req.body.body,
-      handle: req.user.handle,
+      userHandle: req.user.handle,
+      userImage: req.user.imageUrl,
+      likeCount: 0,
+      commentCount: 0,
       createdAt: admin.firestore.Timestamp.now()
     };
 
     const result = await db.collection('screams').add(scream);
-    return res.json({ message: `scream created (${result.id})` });
+    const screamDocument = await result.get();
+    return res.json({ id: result.id, ...screamDocument.data() });
   } catch (ex) {
     return res.status(500).json(toJsonError(ex));
   }
@@ -89,6 +93,74 @@ export const commentOnScream = async (
 
     const result = await db.collection('comments').add(comment);
     return res.json((await result.get()).data());
+  } catch (ex) {
+    return res.status(500).json(toJsonError(ex));
+  }
+};
+
+export const likeScream = async (
+  req: express.Request,
+  res: express.Response
+): Promise<express.Response<unknown>> => {
+  try {
+    if (!req.user) throw new Error('Unauthenticated request!');
+
+    const screamDocument = await db.collection('screams').doc(req.params.screamId).get();
+    if (!screamDocument.exists) {
+      return res.status(404).json({ message: 'scream not found' });
+    }
+
+    const likesQuery = await db
+      .collection('likes')
+      .where('userHandle', '==', req.user.handle)
+      .where('screamId', '==', req.params.screamId)
+      .limit(1)
+      .get();
+
+    if (!likesQuery.empty) {
+      return res.status(400).json({ message: 'scream already liked' });
+    }
+
+    await db.collection('likes').add({ screamId: screamDocument.id, userHandle: req.user.handle });
+    await screamDocument.ref.update({
+      likeCount: admin.firestore.FieldValue.increment(1)
+    });
+
+    return res.json((await screamDocument.ref.get()).data());
+  } catch (ex) {
+    return res.status(500).json(toJsonError(ex));
+  }
+};
+
+export const unlikeScream = async (
+  req: express.Request,
+  res: express.Response
+): Promise<express.Response<unknown>> => {
+  try {
+    if (!req.user) throw new Error('Unauthenticated request!');
+
+    const screamDocument = await db.collection('screams').doc(req.params.screamId).get();
+    if (!screamDocument.exists) {
+      return res.status(404).json({ message: 'scream not found' });
+    }
+
+    const likesQuery = await db
+      .collection('likes')
+      .where('userHandle', '==', req.user.handle)
+      .where('screamId', '==', req.params.screamId)
+      .limit(1)
+      .get();
+
+    if (likesQuery.empty) {
+      return res.status(400).json({ message: 'scream already unliked' });
+    }
+
+    await likesQuery.docs[0].ref.delete();
+    await screamDocument.ref.update({
+      likeCount: admin.firestore.FieldValue.increment(-1)
+    });
+
+    return res.json((await screamDocument.ref.get()).data());
   } catch (ex) {
     return res.status(500).json(toJsonError(ex));
   }

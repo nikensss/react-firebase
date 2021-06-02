@@ -1,4 +1,10 @@
 {
   "eslint.workingDirectories": ["functions"],
-  "cSpell.words": ["gcloud", "gsutil", "middlewares", "signup"]
+  "cSpell.words": [
+    "gcloud",
+    "gsutil",
+    "middlewares",
+    "signup",
+    "unliked"
+  ]
 }
