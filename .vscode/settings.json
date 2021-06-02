@@ -1,6 +1,9 @@
 {
   "eslint.workingDirectories": ["functions"],
   "cSpell.words": [
+    "HXZCVVG",
+    "Izbp",
+    "firebaseapp",
     "gcloud",
     "gsutil",
     "middlewares",
