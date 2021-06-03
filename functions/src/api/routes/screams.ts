@@ -91,6 +91,7 @@ export const commentOnScream = async (
       return res.status(404).json({ error: 'original scream not found' });
     }
 
+    await scream.ref.update({ commentCount: admin.firestore.FieldValue.increment(1) });
     const result = await db.collection('comments').add(comment);
     return res.json((await result.get()).data());
   } catch (ex) {
@@ -161,6 +162,31 @@ export const unlikeScream = async (
     });
 
     return res.json((await screamDocument.ref.get()).data());
+  } catch (ex) {
+    return res.status(500).json(toJsonError(ex));
+  }
+};
+
+export const deleteScream = async (
+  req: express.Request,
+  res: express.Response
+): Promise<express.Response<unknown>> => {
+  try {
+    if (!req.user) throw new Error('Unauthenticated request!');
+
+    const screamDocument = await db.collection('screams').doc(req.params.screamId).get();
+    const scream = screamDocument.data();
+    if (!scream) {
+      return res.status(404).json({ message: 'scream not found' });
+    }
+
+    if (scream.userHandle !== req.user.handle) {
+      return res.status(403).json({ message: 'unauthorized' });
+    }
+
+    await screamDocument.ref.delete();
+
+    return res.json({ message: `scream ${screamDocument.id} deleted` });
   } catch (ex) {
     return res.status(500).json(toJsonError(ex));
   }

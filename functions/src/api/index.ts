@@ -7,6 +7,7 @@ import { isRegistered } from './middlewares';
 import { login, signup } from './routes/auth';
 import {
   commentOnScream,
+  deleteScream,
   getScream,
   getScreams,
   likeScream,
@@ -41,6 +42,8 @@ app.get('/scream/:screamId', getScream);
 app.post('/scream/:screamId/comment', isRegistered, commentOnScream);
 app.post('/scream/:screamId/like', isRegistered, likeScream);
 app.post('/scream/:screamId/unlike', isRegistered, unlikeScream);
+app.delete('/scream/:screamId', isRegistered, deleteScream);
+
 app.get('/screams', getScreams);
 
 app.post('/signup', signup);
