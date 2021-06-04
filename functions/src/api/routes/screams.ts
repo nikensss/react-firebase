@@ -172,21 +172,29 @@ export const deleteScream = async (
   res: express.Response
 ): Promise<express.Response<unknown>> => {
   try {
-    if (!req.user) throw new Error('Unauthenticated request!');
+    if (!req.user) return res.status(401).json({ message: 'unauthorized' });
 
-    const screamDocument = await db.collection('screams').doc(req.params.screamId).get();
+    const { screamId } = req.params;
+    if (!screamId) return res.status(400).json({ message: `invalid scream id ${screamId}` });
+
+    const screamDocument = await db.collection('screams').doc(screamId).get();
     const scream = screamDocument.data();
-    if (!scream) {
-      return res.status(404).json({ message: 'scream not found' });
-    }
+    if (!scream) return res.status(404).json({ message: 'scream not found' });
 
     if (scream.userHandle !== req.user.handle) {
       return res.status(403).json({ message: 'unauthorized' });
     }
 
-    await screamDocument.ref.delete();
+    await db.runTransaction(async (t) => {
+      const likes = await db.collection('likes').where('screamId', '==', screamId).get();
+      const comments = await db.collection('comments').where('screamId', '==', screamId).get();
 
-    return res.json({ message: `scream ${screamDocument.id} deleted` });
+      likes.docs.map((like) => t.delete(like.ref));
+      comments.docs.map((comment) => t.delete(comment.ref));
+      t.delete(screamDocument.ref);
+    });
+
+    return res.json({ message: `comments, likes and scream ${screamDocument.id} deleted` });
   } catch (ex) {
     return res.status(500).json(toJsonError(ex));
   }
