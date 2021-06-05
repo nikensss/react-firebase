@@ -13,13 +13,22 @@ const createNotificationFor = (type: string) => {
       const scream = screamDocument.data();
       if (!scream) return;
 
+      const recipient = scream.userHandle;
+      const sender = data.userHandle;
+      if (recipient === sender) {
+        functions.logger.info(
+          `notification not created because sender (${sender}) is recipient (${recipient})`
+        );
+        return;
+      }
+
       await db.collection('notifications').doc(snapshot.id).set({
+        screamId: screamDocument.id,
         createdAt: admin.firestore.Timestamp.now(),
-        recipient: scream.userHandle,
-        sender: data.userHandle,
-        type,
         read: false,
-        screamId: screamDocument.id
+        recipient,
+        sender,
+        type
       });
     } catch (ex) {
       functions.logger.error('Could not create notification!', toJsonError(ex), { type });
