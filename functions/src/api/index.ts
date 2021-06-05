@@ -18,6 +18,7 @@ import {
   addUserDetails,
   getAuthenticatedUser,
   getUserDetails,
+  markNotificationsRead,
   uploadImage
 } from './routes/user';
 
@@ -58,5 +59,7 @@ app.get('/user', isRegistered, getAuthenticatedUser);
 app.post('/user', isRegistered, addUserDetails);
 app.post('/user/image', isRegistered, uploadImage);
 app.get('/user/:handle', getUserDetails);
+
+app.post('/notifications', isRegistered, markNotificationsRead);
 
 export const api = functions.region('europe-west1').https.onRequest(app);

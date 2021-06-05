@@ -166,3 +166,21 @@ export const getUserDetails = async (
     return res.status(500).json({ error: ex.code });
   }
 };
+
+export const markNotificationsRead = async (
+  req: express.Request,
+  res: express.Response
+): Promise<unknown> => {
+  try {
+    const batch = db.batch();
+
+    req.body.forEach((notificationId: string) => {
+      const notificationReference = db.collection('notifications').doc(notificationId);
+      batch.update(notificationReference, { read: true });
+    });
+    await batch.commit();
+    return res.json({ message: 'notifications marked as read' });
+  } catch (ex) {
+    return res.status(500).json({ error: ex.code });
+  }
+};
