@@ -27,6 +27,14 @@ export const getAuthenticatedUser = async (
     const likes = await db.collection('likes').where('userHandle', '==', handle).get();
     result.likes = likes.docs.map((l) => l.data());
 
+    const notifications = await db
+      .collection('notifications')
+      .where('recipient', '==', handle)
+      .orderBy('createdAt', 'desc')
+      .limit(10)
+      .get();
+    result.notifications = notifications.docs.map((n) => ({ notificationId: n.id, ...n.data() }));
+
     return res.json({ userData: result });
   } catch (ex) {
     return res.status(500).json({ error: ex.code });
@@ -56,12 +64,6 @@ export const uploadImage = async (
 ): Promise<unknown> => {
   if (!req.user) return res.status(403).json({ message: 'unauthorized' });
   const { handle } = req.user;
-  // if (
-  //   !req.headers['content-type'] ||
-  //   !['image/jpeg', 'image/png'].includes(req.headers['content-type'])
-  // ) {
-  //   return res.status(401).json({ message: 'Wrong file type' }).end();
-  // }
 
   const busboy = new BusBoy({ headers: req.headers });
 

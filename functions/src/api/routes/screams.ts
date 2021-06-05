@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 import { isEmpty, toJsonError } from '../../utils';
 
 const db = admin.firestore();
@@ -129,6 +130,7 @@ export const likeScream = async (
 
     return res.json((await screamDocument.ref.get()).data());
   } catch (ex) {
+    functions.logger.error('Could not like scream', toJsonError(ex));
     return res.status(500).json(toJsonError(ex));
   }
 };
@@ -163,6 +165,7 @@ export const unlikeScream = async (
 
     return res.json((await screamDocument.ref.get()).data());
   } catch (ex) {
+    functions.logger.error('Could not like scream', toJsonError(ex));
     return res.status(500).json(toJsonError(ex));
   }
 };
