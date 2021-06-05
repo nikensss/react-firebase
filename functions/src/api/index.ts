@@ -14,7 +14,12 @@ import {
   scream,
   unlikeScream
 } from './routes/screams';
-import { addUserDetails, getAuthenticatedUser, uploadImage } from './routes/user';
+import {
+  addUserDetails,
+  getAuthenticatedUser,
+  getUserDetails,
+  uploadImage
+} from './routes/user';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyABk4Zyl_cBnjPkSp7NIzbp4wq85zg1waA',
@@ -52,5 +57,6 @@ app.post('/login', login);
 app.get('/user', isRegistered, getAuthenticatedUser);
 app.post('/user', isRegistered, addUserDetails);
 app.post('/user/image', isRegistered, uploadImage);
+app.get('/user/:handle', getUserDetails);
 
 export const api = functions.region('europe-west1').https.onRequest(app);

@@ -126,3 +126,43 @@ export const uploadImage = async (
 
   return;
 };
+
+export const getUserDetails = async (
+  req: express.Request,
+  res: express.Response
+): Promise<unknown> => {
+  try {
+    const { handle } = req.params;
+    if (!handle) {
+      return res.status(401).json({ message: `invalid handle: ${handle}` });
+    }
+
+    const result: Record<string, unknown> = {};
+    const user = (await db.collection('users').doc(handle).get()).data();
+    if (!user) {
+      return res.status(404).json({ message: 'not found' });
+    }
+    result.user = user;
+
+    const screams = await db
+      .collection('screams')
+      .where('userHandle', '==', handle)
+      .orderBy('createdAt', 'desc')
+      .get();
+    result.screams = screams.docs.map((s) => ({ screamId: s.id, ...s.data() }));
+
+    const comments = await db
+      .collection('comments')
+      .where('userHandle', '==', handle)
+      .orderBy('createdAt', 'desc')
+      .get();
+    result.comments = comments.docs.map((c) => c.data());
+
+    const likes = await db.collection('likes').where('userHandle', '==', handle).get();
+    result.likes = likes.docs.map((l) => l.data());
+
+    return res.json({ userData: result });
+  } catch (ex) {
+    return res.status(500).json({ error: ex.code });
+  }
+};
