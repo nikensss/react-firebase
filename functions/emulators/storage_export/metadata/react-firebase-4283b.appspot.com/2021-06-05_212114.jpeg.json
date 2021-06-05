@@ -1,0 +1,20 @@
+{
+  "name": "2021-06-05_212114.jpeg",
+  "bucket": "react-firebase-4283b.appspot.com",
+  "contentType": "image/jpeg",
+  "metageneration": 1,
+  "generation": 1622928074762,
+  "storageClass": "STANDARD",
+  "etag": "someETag",
+  "contentDisposition": "inline",
+  "contentEncoding": "identity",
+  "customMetadata": {
+    "contentType": "image/jpeg"
+  },
+  "downloadTokens": [],
+  "timeCreated": "2021-06-05T21:21:14.761Z",
+  "updated": "2021-06-05T21:21:14.764Z",
+  "size": 25275,
+  "md5Hash": "oBU7DnhtJiJPonGRsrqjnQ==",
+  "crc32c": "441248744"
+}

@@ -37,7 +37,7 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use((req, res, next) => {
   const now = admin.firestore.Timestamp.now().toDate();
-  functions.logger.info(`new request received (${req.method}) at ${now}`);
+  functions.logger.info(`new request received (${req.method}) at ${req.originalUrl} (${now})`);
   next();
 });
 

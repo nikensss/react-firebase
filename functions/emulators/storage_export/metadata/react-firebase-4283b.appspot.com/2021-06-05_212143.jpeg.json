@@ -1,9 +1,9 @@
 {
-  "name": "2021-06-01_214610.jpeg",
+  "name": "2021-06-05_212143.jpeg",
   "bucket": "react-firebase-4283b.appspot.com",
   "contentType": "image/jpeg",
   "metageneration": 1,
-  "generation": 1622583970273,
+  "generation": 1622928103542,
   "storageClass": "STANDARD",
   "etag": "someETag",
   "contentDisposition": "inline",
@@ -12,8 +12,8 @@
     "contentType": "image/jpeg"
   },
   "downloadTokens": [],
-  "timeCreated": "2021-06-01T21:46:10.272Z",
-  "updated": "2021-06-01T21:46:10.272Z",
+  "timeCreated": "2021-06-05T21:21:43.541Z",
+  "updated": "2021-06-05T21:21:43.541Z",
   "size": 5795,
   "md5Hash": "8gf0bB0wfi/GGspaI4kwwQ==",
   "crc32c": "3638917476"

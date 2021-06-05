@@ -1,4 +1,4 @@
-import { isEmail, isEmpty } from '.';
+import { isEmail, isEmpty } from './utils';
 
 export interface Validator {
   errors: Record<string, string>;

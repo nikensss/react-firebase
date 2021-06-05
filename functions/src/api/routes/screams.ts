@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { isEmpty, toJsonError } from '../../utils';
+import { isEmpty, toJsonError } from '../../utils/utils';
 
 const db = admin.firestore();
 
@@ -77,7 +77,7 @@ export const commentOnScream = async (
   try {
     if (!req.user) throw new Error('Unauthenticated request!');
 
-    if (isEmpty(req.body.body)) return res.status(401).json({ body: 'Must not be empty' });
+    if (isEmpty(req.body.body)) return res.status(401).json({ comment: 'Must not be empty' });
 
     const comment = {
       body: req.body.body,
@@ -188,15 +188,7 @@ export const deleteScream = async (
       return res.status(403).json({ message: 'unauthorized' });
     }
 
-    await db.runTransaction(async (t) => {
-      const likes = await db.collection('likes').where('screamId', '==', screamId).get();
-      const comments = await db.collection('comments').where('screamId', '==', screamId).get();
-
-      likes.docs.map((like) => t.delete(like.ref));
-      comments.docs.map((comment) => t.delete(comment.ref));
-      t.delete(screamDocument.ref);
-    });
-
+    await db.collection('screams').doc(screamId).delete();
     return res.json({ message: `comments, likes and scream ${screamDocument.id} deleted` });
   } catch (ex) {
     return res.status(500).json(toJsonError(ex));

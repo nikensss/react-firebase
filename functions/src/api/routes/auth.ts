@@ -2,7 +2,7 @@ import * as express from 'express';
 import firebase from 'firebase';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { toJsonError } from '../../utils';
+import { toJsonError } from '../../utils/utils';
 import { UserSignup, validateLoginData, validateSignupData } from '../../utils/validators';
 
 const db = admin.firestore();
@@ -55,7 +55,7 @@ export const signup = async (
       return res.status(401).json({ email: error });
     }
 
-    return res.status(500).json(error);
+    return res.status(500).json({ general: 'Something went wrong. Please, try again.' });
   }
 };
 
