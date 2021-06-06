@@ -9,7 +9,7 @@ export const notifyCommentOnScream = functions
   .firestore.document('comments/{commentId}')
   .onCreate(createNotificationFor('comment'));
 
-export const deleteLikeNotificationOnUnlike = functions
+export const deleteCommentNotification = functions
   .region('europe-west1')
   .firestore.document('comments/{commentId}')
   .onDelete(async (snapshot) => {
