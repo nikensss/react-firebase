@@ -8,14 +8,15 @@ import { signup } from './pages/signup';
 function App() {
   return (
     <div className='App'>
-      <h1>Our app</h1>
       <Router>
         <Navbar />
-        <Switch>
-          <Route exact path='/' component={home}></Route>
-          <Route exact path='/login' component={login}></Route>
-          <Route exact path='/signup' component={signup}></Route>
-        </Switch>
+        <div className='container'>
+          <Switch>
+            <Route exact path='/' component={home}></Route>
+            <Route exact path='/login' component={login}></Route>
+            <Route exact path='/signup' component={signup}></Route>
+          </Switch>
+        </div>
       </Router>
     </div>
   );
