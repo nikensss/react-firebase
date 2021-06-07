@@ -9,7 +9,7 @@ export const notifyLikeOnScream = functions
   .firestore.document('likes/{likeId}')
   .onCreate(createNotificationFor('like'));
 
-export const deleteLikeNotificationOnUnlike = functions
+export const deleteLikeNotification = functions
   .region('europe-west1')
   .firestore.document('likes/{likeId}')
   .onDelete(async (snapshot) => {
