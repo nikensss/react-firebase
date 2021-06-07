@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import './home.css';
+import './Home.css';
 
 export const Home = () => {
   const [screams, setScreams] = useState<any>([]);
