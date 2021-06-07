@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const signup = () => {
+export const Signup = () => {
   return (
     <div>
       <h1>Signup page</h1>
