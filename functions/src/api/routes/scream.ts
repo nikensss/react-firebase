@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { isEmpty, toJsonError } from '../../utils/utils';
+import { isRegistered } from '../middlewares';
 
 const db = admin.firestore();
 
@@ -10,6 +11,7 @@ export const getScream = async (
   res: express.Response
 ): Promise<express.Response<unknown>> => {
   try {
+    console.log(req.params);
     const doc = await db.collection('screams').doc(req.params.screamId).get();
     if (!doc.exists) {
       return res.status(404).json({ error: 'scream not found' });
@@ -194,3 +196,13 @@ export const deleteScream = async (
     return res.status(500).json(toJsonError(ex));
   }
 };
+
+// eslint-disable-next-line new-cap
+export const screamRouter = express.Router();
+
+screamRouter.post('', isRegistered, scream);
+screamRouter.get('/:screamId', getScream);
+screamRouter.post('/:screamId/comment', isRegistered, commentOnScream);
+screamRouter.post('/:screamId/like', isRegistered, likeScream);
+screamRouter.post('/:screamId/unlike', isRegistered, unlikeScream);
+screamRouter.delete('/:screamId', isRegistered, deleteScream);

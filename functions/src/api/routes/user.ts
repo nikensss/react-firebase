@@ -8,6 +8,8 @@ import * as os from 'os';
 import * as path from 'path';
 import { toJsonError } from '../../utils/utils';
 import { reduceUserDetails } from '../../utils/validators';
+import { isRegistered } from '../middlewares';
+
 const db = admin.firestore();
 
 export const getAuthenticatedUser = async (
@@ -190,3 +192,11 @@ export const markNotificationsRead = async (
     return res.status(500).json({ error: ex.code });
   }
 };
+
+// eslint-disable-next-line new-cap
+export const userRouter = express.Router();
+
+userRouter.get('', isRegistered, getAuthenticatedUser);
+userRouter.post('', isRegistered, addUserDetails);
+userRouter.post('/image', isRegistered, uploadImage);
+userRouter.get('/:handle', getUserDetails);
