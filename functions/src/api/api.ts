@@ -5,22 +5,8 @@ import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { isRegistered } from './middlewares';
 import { login, signup } from './routes/auth';
-import {
-  commentOnScream,
-  deleteScream,
-  getScream,
-  getScreams,
-  likeScream,
-  scream,
-  unlikeScream
-} from './routes/screams';
-import {
-  addUserDetails,
-  getAuthenticatedUser,
-  getUserDetails,
-  markNotificationsRead,
-  uploadImage
-} from './routes/user';
+import { getScreams, screamRouter } from './routes/scream';
+import { markNotificationsRead, userRouter } from './routes/user';
 
 firebase.initializeApp({
   apiKey: 'AIzaSyABk4Zyl_cBnjPkSp7NIzbp4wq85zg1waA',
@@ -43,22 +29,14 @@ app.use((req, res, next) => {
 
 app.get('/', (req, res) => res.json({ message: 'api root! 🥳' }));
 
-app.post('/scream', isRegistered, scream);
-app.get('/scream/:screamId', getScream);
-app.post('/scream/:screamId/comment', isRegistered, commentOnScream);
-app.post('/scream/:screamId/like', isRegistered, likeScream);
-app.post('/scream/:screamId/unlike', isRegistered, unlikeScream);
-app.delete('/scream/:screamId', isRegistered, deleteScream);
+app.use('/scream', screamRouter);
 
 app.get('/screams', getScreams);
 
 app.post('/signup', signup);
 app.post('/login', login);
 
-app.get('/user', isRegistered, getAuthenticatedUser);
-app.post('/user', isRegistered, addUserDetails);
-app.post('/user/image', isRegistered, uploadImage);
-app.get('/user/:handle', getUserDetails);
+app.use('/user', userRouter);
 
 app.post('/notifications', isRegistered, markNotificationsRead);
 
