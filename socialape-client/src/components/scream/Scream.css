@@ -1,0 +1,31 @@
+.scream {
+  padding: 0.3rem 5% 0 2.5%;
+  margin-bottom: 0.3rem;
+  border-bottom: 2px solid slateblue;
+  background-color: rgba(105, 90, 205, 0.137);
+}
+
+.scream > .scream-body {
+  font-weight: bold;
+}
+
+.scream > .scream-metadata {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scream > .scream-metadata > .scream-likes-and-comments {
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.scream > .scream-metadata > .scream-likes-and-comments > li {
+  margin-right: 0.3rem;
+}
+
+.scream > .scream-metadata > .scream-author {
+  text-align: right;
+}

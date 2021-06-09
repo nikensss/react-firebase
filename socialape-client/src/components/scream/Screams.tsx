@@ -1,3 +1,11 @@
-export const Screams = () => {
-  return <div>The screams here</div>;
+import { IScream, Scream } from './Scream';
+
+export const Screams = ({ screams }: { screams: IScream[] }) => {
+  return (
+    <>
+      {screams.map((s) => (
+        <Scream scream={s} />
+      ))}
+    </>
+  );
 };
