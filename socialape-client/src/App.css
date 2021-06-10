@@ -8,9 +8,14 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: rgb(245, 245, 245);
 }
 
 .container {
   margin: 0 auto 0;
   max-width: 1200px;
+}
+
+a {
+  text-decoration: none;
 }

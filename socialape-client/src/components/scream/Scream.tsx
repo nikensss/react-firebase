@@ -1,9 +1,12 @@
-import { Tooltip } from '@material-ui/core';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import ModeCommentIcon from '@material-ui/icons/ModeComment';
-import { format } from 'date-fns';
-import formatDistance from 'date-fns/formatDistance';
-import './Scream.css';
+import { Theme, Tooltip, Typography } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import { withStyles } from '@material-ui/core/styles';
+import { Styles } from '@material-ui/core/styles/withStyles';
+import { format, formatDistance } from 'date-fns';
+import { Link } from 'react-router-dom';
+
 export interface IScream {
   body: string;
   commentCount: number;
@@ -13,36 +16,59 @@ export interface IScream {
   createdAt: string;
 }
 
-export const Scream = ({ scream }: { scream: IScream }) => {
-  console.log({ createdAt: scream.createdAt });
-  return (
-    <div className='scream'>
-      <p className='scream-body'>{scream.body}</p>
-      <div className='scream-metadata'>
-        <ul className='scream-likes-and-comments'>
-          <li>
-            <FavoriteBorderIcon /> {scream.likeCount}
-          </li>
-          <li>
-            <ModeCommentIcon /> {scream.commentCount}
-          </li>
-        </ul>
-        <p className='scream-author'>
-          <small>
-            {scream.userHandle} -{' '}
-            <Tooltip
-              title={format(new Date(scream.createdAt), 'yyyy/MM/dd HH:mm')}
-              placement='top'
-            >
-              <span>
-                {formatDistance(new Date(scream.createdAt), Date.now(), {
-                  addSuffix: true
-                })}
-              </span>
-            </Tooltip>
-          </small>
-        </p>
-      </div>
-    </div>
-  );
-};
+const styles: Styles<Theme, {}, string> = (theme) => ({
+  scream: {
+    marginBottom: '0.85rem',
+    display: 'flex',
+    padding: '0.3rem 5% 0.3rem 2.5%'
+  },
+  image: {
+    width: 150,
+    height: 150,
+    borderRadius: '100%'
+  },
+  content: {
+    padding: 25
+  }
+});
+
+export const Scream = withStyles(styles)(
+  ({ scream, classes }: { scream: IScream; classes: any }) => {
+    const {
+      body,
+      /*commentCount, likeCount, */ userHandle,
+      userImage,
+      createdAt
+    } = scream;
+    return (
+      <Card className={classes.scream}>
+        <CardMedia
+          className={classes.image}
+          image={userImage}
+          title='Profile image'
+        />
+        <CardContent className={classes.content}>
+          <Typography
+            variant='h5'
+            component={Link}
+            to={`/users/${userHandle}`}
+            color='primary'
+          >
+            {userHandle}
+          </Typography>
+          <Tooltip
+            title={format(new Date(scream.createdAt), 'yyyy/MM/dd HH:mm')}
+            placement='top'
+          >
+            <Typography variant='body2' color='textSecondary'>
+              {formatDistance(new Date(createdAt), Date.now(), {
+                addSuffix: true
+              })}
+            </Typography>
+          </Tooltip>
+          <Typography variant='body1'>{body} </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
+);

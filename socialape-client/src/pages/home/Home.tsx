@@ -1,8 +1,8 @@
 import { Grid } from '@material-ui/core';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { IScream } from '../../components/scream/Scream';
-import { Screams } from '../../components/scream/Screams';
+import { IScream } from '../../components/Scream/Scream';
+import { Screams } from '../../components/Scream/Screams';
 import './Home.css';
 
 export const Home = () => {
