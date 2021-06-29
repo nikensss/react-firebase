@@ -4,7 +4,7 @@ export const Screams = ({ screams }: { screams: IScream[] }) => {
   return (
     <>
       {screams.map((s) => (
-        <Scream scream={s} />
+        <Scream scream={s} key={s.id} />
       ))}
     </>
   );

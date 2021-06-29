@@ -4,16 +4,17 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { withStyles } from '@material-ui/core/styles';
 import { Styles } from '@material-ui/core/styles/withStyles';
-import { format, formatDistance } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 export interface IScream {
   body: string;
   commentCount: number;
+  createdAt: string;
+  id: string;
   likeCount: number;
   userHandle: string;
   userImage: string;
-  createdAt: string;
 }
 
 const styles: Styles<Theme, {}, string> = (theme) => ({
@@ -28,7 +29,8 @@ const styles: Styles<Theme, {}, string> = (theme) => ({
     borderRadius: '100%'
   },
   content: {
-    padding: 25
+    padding: 25,
+    objectFit: 'cover'
   }
 });
 
@@ -61,7 +63,7 @@ export const Scream = withStyles(styles)(
             placement='top'
           >
             <Typography variant='body2' color='textSecondary'>
-              {formatDistance(new Date(createdAt), Date.now(), {
+              {formatDistanceToNow(new Date(createdAt), {
                 addSuffix: true
               })}
             </Typography>

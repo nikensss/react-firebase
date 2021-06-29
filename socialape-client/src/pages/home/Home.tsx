@@ -14,7 +14,6 @@ export const Home = () => {
       const {
         data: { screams }
       } = screamsRequest;
-      console.log({ screams });
       setScreams(screams);
     };
 
