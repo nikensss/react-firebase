@@ -10,9 +10,11 @@ export const toJsonError = (ex: Error): JsonError => {
   return { error: { name: ex.name, message: ex.message, stack: ex.stack } };
 };
 
-export const isEmpty = (s: string): boolean => s.trim().length === 0;
+export const isEmpty = (s?: string): boolean => typeof s === 'string' && s.trim().length === 0;
 
-export const isEmail = (email: string): boolean => {
+export const isEmail = (email?: string): boolean => {
+  if (typeof email !== 'string') return false;
+
   const emailRegEx =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return email.match(emailRegEx) !== null;
