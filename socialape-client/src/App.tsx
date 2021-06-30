@@ -1,7 +1,7 @@
 import { deepPurple, purple } from '@material-ui/core/colors';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
+import './App.scss';
 import { Navbar } from './components/navbar/Navbar';
 import { Home } from './pages/Home/Home';
 import { Login } from './pages/Login';

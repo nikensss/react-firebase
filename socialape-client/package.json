@@ -48,5 +48,9 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5001/react-firebase-4283b/europe-west1/api"
+  "proxy": "http://localhost:5001/react-firebase-4283b/europe-west1/api",
+  "devDependencies": {
+    "sass": "^1.35.1",
+    "scss": "^0.2.4"
+  }
 }

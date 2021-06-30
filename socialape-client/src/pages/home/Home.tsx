@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { IScream } from '../../components/Scream/Scream';
 import { Screams } from '../../components/Scream/Screams';
-import './Home.css';
+import './Home.scss';
 
 export const Home = () => {
   const [screams, setScreams] = useState<IScream[]>([]);

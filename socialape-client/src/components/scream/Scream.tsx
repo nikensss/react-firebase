@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { withStyles } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/core/styles/withStyles';
+import { ClassNameMap, Styles } from '@material-ui/core/styles/withStyles';
 import { format, formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
 
@@ -35,7 +35,7 @@ const styles: Styles<Theme, {}, string> = (theme) => ({
 });
 
 export const Scream = withStyles(styles)(
-  ({ scream, classes }: { scream: IScream; classes: any }) => {
+  ({ scream, classes }: { scream: IScream; classes: ClassNameMap<string> }) => {
     const {
       body,
       /*commentCount, likeCount, */ userHandle,
